@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlinkGTK — Product & Services</title>
+<meta name="description" content="BlinkGTK for products and services — commercial licensing, PoC, and custom development. 製品版・PoC・開発のご相談窓口。">
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.8;
+    color: #1f2933;
+    background: #f7f9fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e9ec; background: #11161b; }
+    a { color: #6ea8ff; }
+    .card { background: #1a2027 !important; border-color: #2a323b !important; }
+    .muted { color: #9aa4ad !important; }
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 8vh 24px 12vh; }
+  header h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); margin: 0 0 .15em; letter-spacing: -0.02em; }
+  .tagline { font-size: 1.1rem; margin: 0 0 2.2em; }
+  .tagline .ja { display: block; }
+  .tagline .en { display: block; color: #5b6770; font-size: .95rem; margin-top: .3em; }
+  .card { background: #fff; border: 1px solid #e1e6ea; border-radius: 12px; padding: 20px 24px; margin: 1.1em 0; }
+  .card h2 { font-size: 1.05rem; margin: 0 0 .4em; }
+  .card p { margin: .3em 0; }
+  a { color: #1a5fb4; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .muted { color: #6b7680; font-size: .9rem; }
+  footer { margin-top: 4em; font-size: .8rem; color: #8a949d; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>BlinkGTK</h1>
+      <p class="tagline">
+        <span class="ja">製品での採用・PoC・開発のご相談窓口。</span>
+        <span class="en">For products, proofs of concept, and custom development.</span>
+      </p>
+    </header>
+
+    <main>
+      <div class="card">
+        <h2>製品版 / For products</h2>
+        <p class="ja">GTK4 アプリに Chromium / Blink エンジンを組み込む BlinkGTK を、製品への採用・商用利用の観点からご案内します。</p>
+        <p class="en muted">BlinkGTK embeds the Chromium / Blink engine into GTK4 applications — presented here from a product and commercial-use perspective.</p>
+      </div>
+
+      <div class="card">
+        <h2>PoC・受託開発 / PoC & custom development</h2>
+        <p class="ja">概念実証（PoC）や、埋め込み Web エンジンを用いたアプリ開発のご相談を承ります。</p>
+        <p class="en muted">We take on proofs of concept and custom application development built on an embedded web engine.</p>
+      </div>
+
+      <div class="card">
+        <p class="muted">準備中：ご相談の受付方法を近日ご案内します。 ／ Under construction: an inquiry channel will be available here soon.</p>
+        <p class="muted">技術・コミュニティ情報は <a href="https://blinkgtk.org/">blinkgtk.org</a> をご覧ください。 ／ For technical and community information, see <a href="https://blinkgtk.org/">blinkgtk.org</a>.</p>
+      </div>
+    </main>
+
+    <footer>
+      <p>FUSEe Project ／ BlinkGTK Project</p>
+    </footer>
+  </div>
+</body>
+</html>
