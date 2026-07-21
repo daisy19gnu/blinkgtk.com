@@ -84,6 +84,7 @@
           <tr><td>v1.1.0-build2</td><td>150.0.7871.46</td><td>0.1</td><td>software v1.0（既定 / default）</td><td>未対応 / not yet</td><td>開発 / dev</td></tr>
         </table></div>
         <!-- BLINKGTK_RELEASE_END -->
+        <p class="muted" id="dl-count" hidden></p>
       </div>
 
       <div class="card">
@@ -96,5 +97,25 @@
       <p>FUSEe Project ／ BlinkGTK Project</p>
     </footer>
   </div>
+<script>
+(function () {
+  var el = document.getElementById('dl-count');
+  if (!el) return;
+  fetch('https://api.github.com/repos/daisy19gnu/blinkgtk-dist/releases?per_page=100')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+    .then(function (rels) {
+      var pkg = /\.(rpm|deb|tar\.gz|tar\.bz2)$/;
+      var n = 0;
+      rels.forEach(function (rel) {
+        (rel.assets || []).forEach(function (a) {
+          if (pkg.test(a.name)) n += a.download_count || 0;
+        });
+      });
+      el.textContent = 'ダウンロード数 ／ Downloads: ' + n.toLocaleString('en-US');
+      el.hidden = false;
+    })
+    .catch(function () { /* rate-limited or offline: leave hidden */ });
+})();
+</script>
 </body>
 </html>
