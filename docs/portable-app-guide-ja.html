@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BlinkGTK ポータブルアプリケーション作成ガイド —
+BlinkGTK</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="docs.css" />
+</head>
+<body>
+<div class="wrap"><div class="navbar">
+  <a href="index.html">Documentation</a> ·
+  <a href="../index.html">BlinkGTK</a>
+</div><div class="card doc">
+<h1 id="blinkgtk-ポータブルアプリケーション作成ガイド">BlinkGTK
+ポータブルアプリケーション作成ガイド</h1>
+<p><strong>作成者</strong>: BlinkGTK Project<br />
+<strong>最終更新</strong>: 2026-07-03<br />
+<strong>対象</strong>: BlinkGTK
+バイナリ配布物を使い、単一ディレクトリで動作する自己完結型 (ポータブル)
+アプリケーションを作成する開発者</p>
+<hr />
+<h2 id="1-ポータブル版とは">1. ポータブル版とは</h2>
+<p>BlinkGTK のポータブル版とは、アプリケーション実行ファイルと BlinkGTK
+/ Chromium
+ランタイム一式を単一ディレクトリにまとめ、<strong>システムへのインストール
+(RPM/DEB) なしにコピーするだけで動作する</strong>構成です。RPATH に
+<code>$ORIGIN</code> (実行ファイル自身の位置からの相対参照)
+を用いるため、ディレクトリごとどこに移動しても動作します。</p>
+<p>ただし「自己完結」には明確な範囲があります。<strong>同梱されるのは
+BlinkGTK と Chromium ランタイムのみ</strong>であり、GTK4・glibc・GPU
+ドライバ等はホストシステムのものを使用します。この境界を理解しないと「コピーしたのに動かない」事態になります。第
+2 章で制限を詳しく解説します。</p>
+<h2 id="2-動作環境と制限-重要">2. 動作環境と制限 (重要)</h2>
+<p>ポータブル版は「どこでも動く」わけではありません。以下の制限を必ず確認してください。</p>
+<h3 id="21-cpu-アーキテクチャ">2.1 CPU アーキテクチャ</h3>
+<ul>
+<li><strong>x86_64 (amd64) 専用</strong>です。ARM64 等では動作しません
+(バイナリ互換なし)。</li>
+</ul>
+<h3 id="22-glibc-バージョン-最重要の下限制約">2.2 glibc バージョン
+(最重要の下限制約)</h3>
+<ul>
+<li>BlinkGTK バイナリは静的リンクではなく、<strong>ビルド環境の glibc
+に依存</strong>します。ビルド環境より古い glibc のシステムでは
+<code>GLIBC_x.xx not found</code> エラーで起動しません。</li>
+<li>目安: ビルド環境 (Fedora 44 世代)
+と同世代以降のディストリビューション。古い長期サポート版 (例: 数年前の
+enterprise 系) では動作しない可能性が高いです。</li>
+<li>確認方法:
+<pre><code>ldd --version          # ホストの glibc バージョン
+ldd ./libblinkgtk-0.1.so.0.0.0 |
+</code></pre></li>
+</ul>
+<p>grep "not found" # 欠落依存の列挙</p>
+<pre><code>`not found` が 1 件でもあれば、そのホストでは動作しません。
+
+### 2.3 GTK4 はシステム依存 (同梱されない)
+- BlinkGTK は**システムの GTK4** に対してビルドされています。ポータブル版に GTK4 は同梱されず、ホストに GTK4 (4.6 以上、検証済みは 4.22 世代) が必要です。
+- GTK テーマ・アイコン・IME (ibus/fcitx) もホスト側の構成に従います。ホストに日本語 IME がなければポータブル版でも日本語入力はできません。
+- 確認方法: `pkg-config --modversion gtk4` またはディストリビューションのパッケージ管理で gtk4 の有無を確認。
+
+### 2.4 Wayland 専用 (X11 では動作しない)
+- BlinkGTK は **Wayland 専用**です (内部で `--ozone-platform=wayland` を強制)。X11 セッションでは動作しません。
+- **Wayland コンポジタが動作しているセッション**が必須です (GNOME/Mutter で主に検証。他コンポジタは検証度が下がります)。
+- ログインセッションが X11 か Wayland かは `echo $XDG_SESSION_TYPE` で確認できます (`wayland` であること)。
+- SSH 先やディスプレイのないサーバでは、そのままでは起動できません (weston headless 等のネスト環境が必要)。
+
+### 2.5 GPU / 描画経路
+- **software 経路** (既定): GPU 不要で動作します。まず software で動作確認してください。
+- **EGL (GPU) 経路**: Mesa と dmabuf 対応 GPU が必要です (Intel/AMD Mesa で検証)。GPU やドライバ構成によっては利用できません。
+- HiDPI (スケール 2 等) 環境では、描画スケール不整合を避けるための設定が必要になる場合があります (同梱の設定・起動スクリプトの記述に従ってください)。
+
+### 2.6 Chromium sandbox とカーネル設定
+- Chromium の sandbox は **unprivileged user namespaces** を利用します。これを無効化しているシステム (一部のハードニング環境・コンテナ) では renderer の起動に失敗することがあります。
+- コンテナ内・制限環境で起動しない場合はこの点を確認してください。sandbox を無効にする起動 (`--no-sandbox`) は動作はしますが**セキュリティ保護を失うため、信頼できないコンテンツの表示には使用しないでください**。
+
+### 2.7 ファイルシステム要件
+- **noexec マウントでは実行できません**。USB メモリや `/tmp` が noexec でマウントされている環境では、実行属性が有効な場所に展開してください。
+- **シンボリックリンクを保持できるファイルシステム** (ext4/xfs/btrfs) に展開してください。FAT/exFAT/NTFS では SONAME シンボリックリンクが実体コピーになるか失われ、起動不能や容量倍増の原因になります。
+- 配布アーカイブは **tar.gz 形式を使用**してください (実行属性とシンボリックリンクを保持)。zip は属性を失うため不可です。
+- 展開先パスに空白・非 ASCII 文字を含めないことを推奨します。
+
+### 2.8 リソース
+- ディスク: 展開後 約 650MB 以上。
+- メモリ: プロセス群 (browser + renderer + GPU) で数百 MB 以上を想定してください。
+
+### 2.9 フォント
+- 文字描画はホストの fontconfig とフォントに依存します。日本語表示にはホストに日本語フォント (原ノ味、Noto CJK 等) が必要です。
+
+### 2.10 制限まとめ (チェックリスト)
+
+| 項目 | 要件 | 確認コマンド |
+|---|---|---|
+| CPU | x86_64 | `uname -m` |
+| glibc | ビルド環境世代以降 | `ldd --version` / `ldd ... \| grep &quot;not found&quot;` |
+| GTK4 | 4.6+ (システム) | `pkg-config --modversion gtk4` |
+| セッション | Wayland | `echo $XDG_SESSION_TYPE` |
+| GPU (EGL 時) | Mesa + dmabuf | software 経路で切り分け |
+| user namespaces | 有効 | sandbox 起動失敗時に確認 |
+| 展開先 FS | ext4 等 + exec 可 | `mount \| grep noexec` |
+| 日本語フォント | ホストに必要 | `fc-list \| grep -i mincho` 等 |
+
+## 3. ポータブルアプリの構成
+
+推奨レイアウト (単一ディレクトリ自己完結):
+</code></pre>
+<p>myapp-portable/<br />
+├── myapp # あなたのアプリ実行ファイル (RPATH=$ORIGIN/lib)<br />
+├── run.sh # 起動スクリプト (任意、環境変数の設定用)<br />
+├── lib/<br />
+│ ├── libblinkgtk-0.1.so.0.0.0<br />
+│ ├── libblinkgtk-0.1.so.0 -&gt; libblinkgtk-0.1.so.0.0.0<br />
+│ └── chromium/ # Chromium ランタイム一式 (バイナリ配布物から)<br />
+│ ├── *.so # 共有ライブラリ群<br />
+│ ├── icudtl.dat / snapshot_blob.bin / v8_context_snapshot.bin<br />
+│ ├── content_shell.pak<br />
+│ └── locales/ja.pak, en-US.pak<br />
+├── share/<br />
+│ └── myapp/ # アプリのリソース<br />
+└── THIRD_PARTY_NOTICES.html # 必須 (第 6 章)</p>
+<pre><code>
+ランタイム一式は、バイナリ配布 (runtime tarball) の `usr/lib64/blinkgtk-0.1/` 以下をそのまま `lib/` にコピーすることで得られます。**ファイルの取捨選択はしないでください** — Chromium ランタイムの .so、`.pak`、`.dat`、`.bin`、`locales/` は全て起動に必要です (欠落は起動時クラッシュの典型原因)。
+
+## 4. ビルド方法
+
+### 4.1 リンク時の必須事項
+
+アプリは pkg-config を使ってビルドします。**PartitionAlloc allocator shim の直接リンクが必須**です (pkg-config を使えば自動で含まれます)。shim を欠くとページの読み込みが失敗し黒画面になります。
+
+```sh
+gcc -o myapp myapp.c \
+  $(pkg-config --cflags --libs blinkgtk-0.1 gtk4)</code></pre>
+<p>pkg-config を使わず手動リンクする場合は、<code>-lblinkgtk-0.1</code>
+に加えて必ず<br />
+<code>-lbase_allocator_partition_allocator_src_partition_alloc_allocator_shim</code>
+を明示してください。</p>
+<h3 id="42-rpath-の設定-ポータブル化の核心">4.2 RPATH の設定
+(ポータブル化の核心)</h3>
+<p>実行ファイルに <code>$ORIGIN</code> 相対の RPATH を与えます:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> myapp myapp.c <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> blinkgtk-0.1 gtk4<span class="va">)</span> <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-Wl,-rpath,</span><span class="st">&#39;$ORIGIN/lib&#39;</span> <span class="at">-Wl,-rpath,</span><span class="st">&#39;$ORIGIN/lib/chromium&#39;</span> <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--libs</span> blinkgtk-0.1 gtk4<span class="va">)</span></span></code></pre></div>
+<ul>
+<li><code>$ORIGIN</code>
+は「実行ファイル自身のあるディレクトリ」を意味し、ディレクトリごと移動しても解決されます。</li>
+<li>シェルに <code>$ORIGIN</code>
+を展開させないよう、シングルクォートで囲むことに注意してください。</li>
+</ul>
+<p>RPATH を使わない代替として、起動スクリプトで
+<code>LD_LIBRARY_PATH</code> を設定する方法もあります:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># run.sh — myapp-portable/ 直下に配置</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="va">HERE</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$0</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LD_LIBRARY_PATH</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$HERE</span><span class="st">/lib:</span><span class="va">$HERE</span><span class="st">/lib/chromium</span><span class="va">${LD_LIBRARY_PATH</span><span class="op">:+</span>:<span class="va">$LD_LIBRARY_PATH}</span><span class="st">&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> <span class="st">&quot;</span><span class="va">$HERE</span><span class="st">/myapp&quot;</span> <span class="st">&quot;</span><span class="va">$@</span><span class="st">&quot;</span></span></code></pre></div>
+<h3 id="43-検証">4.3 検証</h3>
+<p>作成後、配布前に必ず確認してください:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. 依存の完全性 (not found が 0 件であること)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ldd</span> ./myapp <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;not found&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. shim が直接 NEEDED に入っていること</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">readelf</span> <span class="at">-d</span> ./myapp <span class="kw">|</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> allocator_shim</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. V8 スナップショットの整合 (同一配布物由来なら通常一致)</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># lib/chromium/ の libv8.so / snapshot_blob.bin / v8_context_snapshot.bin を</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 別バージョンの配布物から混在させないこと (起動時クラッシュの原因)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. 実機 (Wayland セッション) での起動確認</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">./run.sh</span></span></code></pre></div>
+<h2 id="5-配布">5. 配布</h2>
+<ul>
+<li><strong>tar.gz で固めて配布</strong>します
+(シンボリックリンク・実行属性を保持):
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> czf myapp-portable-1.0-linux-x86_64.tar.gz myapp-portable/</span></code></pre></div></li>
+<li>利用者向けに、第 2 章の動作環境 (特に glibc 世代 / GTK4 / Wayland
+専用) を README 等で必ず案内してください。</li>
+</ul>
+<h2 id="6-ライセンス上の義務-必須">6. ライセンス上の義務 (必須)</h2>
+<p>BlinkGTK / Chromium
+ランタイムを同梱して配布する場合、以下が必要です:</p>
+<ol type="1">
+<li><strong>THIRD_PARTY_NOTICES.html の同梱</strong> —
+バイナリ配布物に含まれる集約ライセンス表記です。ポータブルアプリにもそのまま同梱してください
+(Chromium
+が内包する数百のサードパーティコンポーネントのライセンス条件により必須です)。</li>
+<li><strong>FFmpeg (LGPL) について</strong> — 同梱の
+<code>libffmpeg.so</code> は LGPL v2.1+
+です。独立した共有ライブラリとして同梱されているため、利用者が差し替え可能な状態を保ってください
+(静的リンク化・削除・改名をしないでください)。</li>
+<li>BlinkGTK 自体のライセンス表記 (LICENSE) も同梱してください。</li>
+</ol>
+<h2 id="7-トラブルシューティング-ポータブル特有">7.
+トラブルシューティング (ポータブル特有)</h2>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因候補</th>
+<th>対処</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GLIBC_x.xx not found</code></td>
+<td>ホスト glibc が古い</td>
+<td>ホスト更新 or 同世代環境で使用 (§2.2)</td>
+</tr>
+<tr>
+<td>起動直後にクラッシュ (SIGTRAP)</td>
+<td>V8 スナップショット混在 / shim 未リンク</td>
+<td>§4.3 の 2,3 を確認</td>
+</tr>
+<tr>
+<td>ウィンドウが出ない</td>
+<td>X11 セッション / コンポジタなし</td>
+<td><code>$XDG_SESSION_TYPE</code> 確認 (§2.4)</td>
+</tr>
+<tr>
+<td>ページが黒いまま</td>
+<td>shim 未リンク</td>
+<td><code>readelf -d</code> で確認 (§4.1)</td>
+</tr>
+<tr>
+<td><code>Permission denied</code></td>
+<td>noexec マウント / 実行属性喪失</td>
+<td>§2.7 (tar.gz で展開し直す)</td>
+</tr>
+<tr>
+<td>起動するが文字化け/豆腐</td>
+<td>ホストに日本語フォントなし</td>
+<td>§2.9</td>
+</tr>
+<tr>
+<td>renderer 起動失敗</td>
+<td>user namespaces 無効</td>
+<td>§2.6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-関連ドキュメント">8. 関連ドキュメント</h2>
+<ul>
+<li>Consumer アプリ統合ガイド
+(<code>consumer-integration-guide-ja.md</code>) —
+API・シグナル・ライフサイクル</li>
+<li>インストールガイド (<code>installation/INSTALLATION-ja.md</code>) —
+システムインストール (RPM/DEB) を使う場合</li>
+<li>QUICKSTART — 最小の動作確認手順</li>
+</ul>
+</body>
+</html>
+</div></div>
