@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BlinkGTK — Product & Services</title>
-<meta name="description" content="BlinkGTK for products and services — commercial licensing, PoC, and custom development. 製品版・PoC・開発のご相談窓口。">
+<meta name="description" content="BlinkGTK の商用ライセンス、PoC、受託開発のご相談窓口。GTK4 向け Chromium/Blink WebView エンジンを組み込み機器・電子書籍リーダー・業務アプリへ導入するための支援を提供します。">
 <style>
   :root { color-scheme: light dark; }
   * { box-sizing: border-box; }
@@ -45,6 +45,22 @@
   .compat-wrap { overflow-x: auto; margin-bottom: .3em; }
   .card p.sec { margin-top: 1.6em; }
 </style>
+<!-- BLINKGTK_SEO_START (release/scripts で管理。手で編集しない) -->
+<link rel="canonical" href="https://blinkgtk.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BlinkGTK — 製品・サービス / Product & Services">
+<meta property="og:description" content="BlinkGTK の商用ライセンス、PoC、受託開発のご相談窓口。GTK4 向け Chromium/Blink WebView エンジンを組み込み機器・電子書籍リーダー・業務アプリへ導入するための支援を提供します。">
+<meta property="og:url" content="https://blinkgtk.com/">
+<meta property="og:site_name" content="BlinkGTK">
+<meta property="og:image" content="https://blinkgtk.org/assets/gallery/g1-kusamakura-ch2-v4.png">
+<meta property="og:image:alt" content="BlinkGTK で描画した日本語縦組みの見開き表示">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BlinkGTK — 製品・サービス / Product & Services">
+<meta name="twitter:description" content="BlinkGTK の商用ライセンス、PoC、受託開発のご相談窓口。GTK4 向け Chromium/Blink WebView エンジンを組み込み機器・電子書籍リーダー・業務アプリへ導入するための支援を提供します。">
+<meta name="twitter:image" content="https://blinkgtk.org/assets/gallery/g1-kusamakura-ch2-v4.png">
+<link rel="alternate" hreflang="ja" href="https://blinkgtk.org/">
+<link rel="alternate" hreflang="x-default" href="https://blinkgtk.org/">
+<!-- BLINKGTK_SEO_END -->
 </head>
 <body>
   <div class="wrap">
@@ -134,7 +150,7 @@
   // 公開時に焼き込んだ実績。GitHub API が使えなくても必ず表示する
   // (未認証 API は 60 req/時・IP 単位で枯渇するため、表示を API に依存させない)。
   var withdrawn = 106;   // 取り下げ済み build の実績 (公開 API からは見えない)
-  var baseline  = 144;       // 公開時点の総計
+  var baseline  = 146;       // 公開時点の総計
   var show = function (n) {
     el.textContent = 'ダウンロード数 / Downloads: ' + n.toLocaleString('en-US');
     el.hidden = false;
