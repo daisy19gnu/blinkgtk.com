@@ -1,6 +1,6 @@
 [blinkgtk]
 name=BlinkGTK
-baseurl=https://blinkgtk.com/repo/fedora
+baseurl=https://blinkgtk.com/repo/fedora/$releasever
 enabled=1
 gpgcheck=1
 repo_gpgcheck=1
